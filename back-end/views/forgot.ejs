@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,intial-scale=1" />
+
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+
+  <body>
+    <div class="card-container">
+      <div class="login-card"> 
+        <!--<form action="mail.html"> -->
+        <h3>Change Password :</h3>
+        
+        <p id = "error_id"></p>
+        <div class="input-row">
+          <label class="input-row-label"
+            >Enter your username</label
+          ><br />
+          <input id = "username_id"
+            placeholder="Enter registered Username"
+            class="input-row-input"
+          />
+        </div>
+
+        <!-- Row - 4 -->
+        <div class="input-row">
+          <!-- <label class="input-row-label">Enter New Password</label><br />
+          <input id = "pass_id"
+            type="password"
+            placeholder="Enter your new Password"
+            class="input-row-input"
+          /> -->
+        <button onclick="onSave()" class="design">send</button>
+        <!-- </form> -->
+       </div>
+    </div>
+  </body>
+  <script>
+    const onSave = async () => {
+        // const passElement = document.getElementById("pass_id")
+        const usernameElement = document.getElementById("username_id")
+        var obj = {
+          username:usernameElement.value,
+          //password:passElement.value,
+        }
+        // console.log(obj)
+        var url ="http://localhost:4005/api/forgot-password"
+        
+        var response = await fetch(url, {
+          method:"POST",
+          headers:{
+            Accept:"application/json",
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify(obj)
+        })
+
+        var response = await response.json();
+       // window.location.href = "index.html";
+
+       var error  = document.getElementById("error_id")
+        if(response.status === false){
+          error.innerText = response.msg
+          error.style.color = "red"
+        }
+        else{
+            error.innerText = ""
+            // localStorage.setItem("token", response.token)
+            // localStorage.setItem("userData", JSON.stringify(response.data))
+            console.log(response.token);
+            window.location.href = "reset-password" 
+        }
+    };
+  </script>
+</html>
+
+
+
+

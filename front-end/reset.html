@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,intial-scale=1" />
+
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+
+  <body>
+    <div class="card-container">
+      <div class="login-card">
+        <!--<form action="mail.html"> -->
+        <h3>Change Password :</h3>
+        <p id="error_id"></p>
+        <div class="input-row">
+          <label class="input-row-label">Enter your email</label><br />
+          <input
+            id="username_id"
+            placeholder="Enter email address"
+            class="input-row-input"
+          />
+        </div>
+
+        <div class="input-row">
+          <label class="input-row-label">Enter your new password</label><br />
+          <input
+            id="pass_id"
+            placeholder="Enter new password"
+            class="input-row-input"
+          />
+          <img src="./images/close-eye.svg" id = "eye_id" onclick="showHidePassword()" class="pass-eye" ></img>
+        </div>
+        <!-- Row - 4 -->
+        <button onclick="onSave()" class="design">save</button>
+        <!-- </form> -->
+      </div>
+    </div>
+  </body>
+  <script>
+    const showHidePassword = () => {
+        const passElement = document.getElementById("pass_id")
+        const imgElement = document.getElementById("eye_id")
+        if(passElement.type ===  "text"){
+          passElement.type = "password"
+          imgElement.src="./images/close-eye.svg"
+        }else{
+          passElement.type = "text"
+          imgElement.src="./images/eye.png"
+        }
+      }
+    const onSave = async () => {
+      const usernameElement = document.getElementById("username_id");
+      const passElement = document.getElementById("pass_id");
+      var obj = {
+        username: usernameElement.value,
+        password: passElement.value,
+      };
+      console.log(obj);
+      var url = "http://localhost:4005/api/reset";
+
+      var response = await fetch(url, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(obj),
+      });
+
+      var response = await response.json();
+      var error = document.getElementById("error_id");
+      if (response.status === false) {
+        error.innerText = response.msg;
+        error.style.color = "red";
+      } else {
+        error.innerText = "";
+        window.location.href = "index.html";
+      }
+    };
+    //window.location.href = "index.html"
+  </script>
+</html>
